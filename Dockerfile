@@ -21,7 +21,8 @@ RUN add-apt-repository \
     stable"
 RUN apt-get update && apt-get install -y docker-ce-cli
 
-# Ajouter l'utilisateur Jenkins au groupe Docker
+# Créer le groupe Docker et ajouter l'utilisateur Jenkins
+RUN groupadd docker
 RUN usermod -aG docker jenkins
 
 USER jenkins
