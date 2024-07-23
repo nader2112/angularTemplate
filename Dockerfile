@@ -21,8 +21,8 @@ RUN add-apt-repository \
     stable"
 RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
-# Créer le groupe Docker et ajouter l'utilisateur Jenkins
-RUN groupadd docker
+# Créer le groupe Docker (si nécessaire) et ajouter l'utilisateur Jenkins
+RUN if ! getent group docker; then groupadd docker; fi
 RUN usermod -aG docker jenkins
 
 # Copier le script docker-entrypoint.sh
