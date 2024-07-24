@@ -6,7 +6,7 @@ USER root
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 
-# Installer Docker
+# Installer Docker CLI
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -19,17 +19,10 @@ RUN add-apt-repository \
     "deb [arch=amd64] https://download.docker.com/linux/debian \
     $(lsb_release -cs) \
     stable"
-RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
+RUN apt-get update && apt-get install -y docker-ce-cli
 
-# Créer le groupe Docker (si nécessaire) et ajouter l'utilisateur Jenkins
+# Ajouter l'utilisateur Jenkins au groupe Docker
 RUN if ! getent group docker; then groupadd docker; fi
 RUN usermod -aG docker jenkins
 
-# Copier le script docker-entrypoint.sh
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Utiliser docker-entrypoint.sh comme point d'entrée
-ENTRYPOINT ["docker-entrypoint.sh"]
-
-USER root
+USER jenkins
